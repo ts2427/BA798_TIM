@@ -1,5 +1,7 @@
 # Disclosure Timing and Market Reactions to Data Breaches: Research Design Document
 
+This assignment is the Methods section of my first essay, just simplified.
+
 ## 1. Research Overview
 
 This study asks if how quickly a firm (I chose this word over company intentionally) discloses a data breach will affect the stock market's reaction, which extends Myers and Majluf's (1984) information asymmetry framework to cybersecurity disclosure decisions. I used an event study design that was built around a natural experiment: the FCC's 2007 rule requiring telecommunication firms to disclose within 7 days, while other industries follow state laws that usually allow anywhere from 30–90 days. That regulatory gap gave me a clean way to test timing effects, similar to the quasi-natural experiment approach used by Cao et al. (2024). OLS regression handles the four main hypothesis tests, and machine learning checks for non-linear patterns that OLS might miss.
