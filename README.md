@@ -195,7 +195,7 @@ This installs the exact versions specified in `uv.lock`.
 ## Contact Information
 
 **Researcher**: Timothy D. Spivey
-**Email**: tspivey@southalabama.edu
+**Email**: ts2427@jagmail.southalabama.edu
 **Course**: BA798 - Machine Learning for Business Research
 **Institution**: University of South Alabama
 

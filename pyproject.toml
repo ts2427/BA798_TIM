@@ -2,7 +2,7 @@
 name = "data-breach-disclosure-timing"
 version = "0.1.0"
 description = "Analysis of market reactions to data breach disclosures using event study methodology"
-authors = [{name = "Timothy D. Spivey", email = "tspivey@southalabama.edu"}]
+authors = [{name = "Timothy D. Spivey", email = "ts2427@jagmail.southalabama.edu"}]
 requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
