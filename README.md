@@ -199,6 +199,16 @@ This installs the exact versions specified in `uv.lock`.
 **Course**: BA798 - Machine Learning for Business Research
 **Institution**: University of South Alabama
 
+## AI Assistance Disclosure
+
+This project used Claude (Anthropic) AI assistance for:
+- Repository structure organization and setup
+- README.md formatting and structure
+- Git workflow and commit messages
+- Markdown formatting and documentation layout
+
+All methodology content, research design, citations, and analysis decisions are the original work of Timothy D. Spivey.
+
 ---
 
 **Last Updated**: February 2026
