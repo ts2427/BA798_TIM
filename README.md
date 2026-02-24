@@ -1,160 +1,218 @@
-# BA798 Repository
+# Data Breach Disclosure Timing and Market Reactions
 
-Welcome to the BA798 repository. This guide explains how to use Claude in VS Code to efficiently add and manage code in this repository.
+## Project Overview
 
-## Setting Up Claude in VS Code
+This research investigates how quickly companies disclose data breaches and whether the timing of disclosure affects stock market reactions. Using an event study design with a natural experiment—the FCC's 2007 rule requiring telecommunications companies to disclose breaches within 7 days—this project analyzes 926 publicly-traded firms to test whether immediate disclosure benefits or harms firm value.
+
+## Research Question
+
+**What factors determine market reactions to data breach disclosures among publicly-traded firms, and does immediate disclosure of breach information benefit or harm firm value?**
+
+### Research Design
+
+- **Methodology**: Event study with natural experiment
+- **Sample**: 926 breaches with complete stock market data (2006-2025)
+- **Dependent Variable**: 30-day cumulative abnormal return (CAR)
+- **Key Hypothesis**: Immediate disclosure (≤7 days) reduces negative market reactions compared to delayed disclosure
+- **Approaches**: OLS regression (hypothesis testing) + Machine Learning (Random Forests, Gradient Boosting for validation)
+
+For detailed methodology, see [`docs/assignment_2_methods.md`](docs/assignment_2_methods.md).
+
+## Installation
 
 ### Prerequisites
-- VS Code installed
-- Claude Code extension installed (search "Claude" in VS Code extensions)
-- An active Claude API key
 
-### Installation Steps
-1. Open VS Code
-2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
-3. Search for "Claude" and install the official Claude extension
-4. Configure your API key in the extension settings
-5. You're ready to start using Claude!
+- Python 3.11 or higher
+- `uv` package manager ([install here](https://docs.astral.sh/uv/getting-started/installation/))
 
-## How to Use Claude with This Repository
+### Setup Instructions
 
-### Opening Claude in VS Code
-- Use the keyboard shortcut `Ctrl+K Cmd+K` (macOS) or `Ctrl+K Ctrl+K` (Windows/Linux)
-- Or click the Claude icon in the activity bar
-- You can also use the command palette: `Ctrl+Shift+P` → "Claude: Open Chat"
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd BA798_TIM
+   ```
 
-### Common Tasks
+2. **Install dependencies:**
+   ```bash
+   uv sync
+   ```
 
-#### 1. **Adding a New Feature**
-Describe what you want to add in the Claude chat:
+   This will create a virtual environment and install all required packages with locked versions (reproducible environment).
+
+3. **Activate the environment:**
+   ```bash
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+### Dependencies
+
+All dependencies are managed through `pyproject.toml`:
+- **Data Processing**: pandas, numpy, scipy
+- **ML/Statistics**: scikit-learn, statsmodels, xgboost
+- **Visualization**: matplotlib, seaborn
+- **Model Interpretation**: shap
+- **Jupyter**: jupyter, ipython
+
+For reproducibility, exact versions are locked in `uv.lock`. Do not modify this file manually.
+
+## Repository Structure
+
 ```
-"Add a new function that [description]. I want it in [file path]"
+.
+├── README.md                              # This file
+├── pyproject.toml                         # Project metadata & dependencies
+├── uv.lock                                # Locked dependency versions
+├── .gitignore                             # Git ignore rules
+│
+├── docs/
+│   └── assignment_2_methods.md            # Complete methodology document
+│
+├── notebooks/
+│   ├── 01_data_collection.ipynb          # Data collection & preprocessing
+│   ├── 02_eda.ipynb                      # Exploratory data analysis
+│   └── README.md                          # Notebook guide
+│
+├── data/
+│   ├── raw/                               # Original, immutable data
+│   ├── processed/                         # Cleaned, transformed data
+│   └── README.md                          # Data documentation
+│
+├── src/                                   # Source code
+│   ├── __init__.py
+│   ├── data/                              # Data loading & preprocessing
+│   ├── features/                          # Feature engineering
+│   ├── models/                            # Model definitions
+│   └── utils/                             # Utility functions
+│
+└── tests/                                 # Unit tests (optional)
+    └── __init__.py
 ```
-Claude will:
-- Examine existing code patterns
-- Write the new feature following your project's style
-- Help with testing and integration
 
-#### 2. **Fixing Bugs**
-```
-"There's a bug in [file path] where [description]. Please fix it."
-```
-Claude will:
-- Analyze the issue
-- Propose a fix
-- Explain what was wrong
+## Data Sources
 
-#### 3. **Understanding Code**
-Ask Claude to explain existing code:
-```
-"Explain what the function [name] does in [file path]"
-```
+This project integrates four major data sources:
 
-#### 4. **Refactoring Code**
-```
-"Refactor [file path] to [goal, e.g., improve readability]"
-```
+1. **DataBreaches.gov** - Privacy Rights Clearinghouse breach registry
+   - 1,054 breaches (2006-2025)
+   - Includes disclosure timing, affected populations, incident descriptions
+   - Link: https://www.privacyrights.org/data-breaches
 
-### Best Practices
+2. **CRSP (Center for Research in Security Prices)** - Daily stock data
+   - 926 firms with complete stock price data (1999-2025)
+   - Used to calculate cumulative abnormal returns (CAR)
+   - Requires WRDS institutional access
 
-**Before starting a task:**
-- Read relevant files first by including them in context
-- Be specific about what you want (file paths, desired behavior)
-- Mention any constraints (performance, compatibility, etc.)
+3. **Compustat** - Annual financial statements
+   - Firm financials for control variables (size, leverage, ROA)
+   - SIC industry classification for FCC regulatory assignment
+   - Requires WRDS institutional access
 
-**During implementation:**
-- Claude can modify multiple files at once
-- Review changes before committing
-- Test code locally before merging
+4. **SEC EDGAR** - Executive officer filings (Form 8-K)
+   - Material event disclosures
+   - Used for executive turnover analysis
+   - Publicly available: https://www.sec.gov/edgar/
 
-**After Claude makes changes:**
-1. Review the code carefully
-2. Run tests if applicable
-3. Test locally if needed
-4. Use `git diff` to see exactly what changed
-5. Commit with a clear message explaining the changes
+**Data Completeness**: See [`data/README.md`](data/README.md) for data dictionary and preprocessing notes.
 
-### Git Workflow
+## Usage
 
-#### Creating a Feature Branch
-From the command line or VS Code terminal:
+### Run Analysis Pipeline
+
+1. **Data Collection & Preprocessing** (Milestone 1)
+   ```bash
+   jupyter notebook notebooks/01_data_collection.ipynb
+   ```
+
+2. **Exploratory Data Analysis** (Milestone 2)
+   ```bash
+   jupyter notebook notebooks/02_eda.ipynb
+   ```
+
+3. **Event Study & OLS Regression** (Milestones 3-4)
+   ```bash
+   jupyter notebook notebooks/03_market_model.ipynb
+   jupyter notebook notebooks/04_ols_regression.ipynb
+   ```
+
+4. **ML Validation** (Milestone 5)
+   ```bash
+   jupyter notebook notebooks/05_ml_validation.ipynb
+   ```
+
+5. **Robustness Checks** (Milestone 6)
+   ```bash
+   jupyter notebook notebooks/06_robustness_checks.ipynb
+   ```
+
+### Run Tests
+
 ```bash
-git checkout -b feature/your-feature-name
+pytest tests/
 ```
 
-#### Making Changes with Claude
-1. Open Claude in VS Code
-2. Describe what you want to implement
-3. Claude will write/modify code
-4. Review the changes in the editor
-5. Save files (Claude may do this automatically)
+## Project Timeline
 
-#### Committing Changes
+| Milestone | Target Date | Deliverable |
+|-----------|-------------|-------------|
+| Data Collection & Preprocessing | Week 1-2 | Clean matched dataset |
+| Exploratory Data Analysis | Week 3 | EDA notebook with insights |
+| Market Model & OLS Regression | Week 4-5 | CARs; Models 1-5 with results |
+| ML Validation | Week 5-6 | Random Forest & Gradient Boosting trained & tuned |
+| Robustness Testing | Week 6-7 | Alternative specifications tested |
+| Documentation & Finalization | Week 7-8 | Complete analysis, code, documentation |
+
+## Key Results
+
+(To be populated after analysis)
+
+- **H1 (Immediate Disclosure)**:
+- **H2 (FCC Regulation)**:
+- **H3 (Prior Breaches)**:
+- **H4 (Health Data)**:
+
+## Reproducibility
+
+### Code Standards
+- Python 3.11+
+- All code committed to git with meaningful commit messages
+- Jupyter notebooks follow 01_*, 02_* naming convention
+- Random seed: 42 (for consistent results)
+
+### Environment Replication
+Users can replicate the exact environment by running:
 ```bash
-git add .
-git commit -m "Add feature: [description]"
+uv sync
 ```
 
-#### Pushing and Creating a Pull Request
-```bash
-git push -u origin feature/your-feature-name
-```
-Then create a PR on GitHub/your platform with a clear description.
+This installs the exact versions specified in `uv.lock`.
 
-## Using Claude's Tools Effectively
+### Data Documentation
+- `data/raw/README.md`: Description of raw data sources and formats
+- `data/processed/README.md`: Data dictionary for processed datasets
+- Variable definitions documented in [`docs/assignment_2_methods.md`](docs/assignment_2_methods.md)
 
-### Slash Commands
-Claude supports various slash commands for specific tasks:
-- Type `/` in the chat to see available commands
-- Examples: `/edit`, `/review`, `/explain`
+## Contact Information
 
-### Multi-File Editing
-Claude can modify multiple files in one request:
-```
-"Update [file1] and [file2] to [goal]"
-```
+**Researcher**: Timothy D. Spivey
+**Email**: ts2427@jagmail.southalabama.edu
+**Course**: BA798 - Machine Learning for Business Research
+**Institution**: University of South Alabama
 
-### Code Review
-Ask Claude to review your code:
-```
-"Review this code for bugs, performance, and style issues"
-```
+## AI Assistance Disclosure
 
-### Testing
-Claude can help write tests:
-```
-"Write unit tests for the [function name] function in [file path]"
-```
+This project used Claude (Anthropic) AI assistance for:
+- Repository structure organization and setup
+- README.md formatting and structure
+- Git workflow and commit messages
+- Markdown formatting and documentation layout
 
-## Tips for Success
-
-1. **Be Specific**: Include file paths and line numbers when referencing code
-2. **Provide Context**: Share relevant portions of existing code
-3. **One Task at a Time**: Complex tasks work better when broken into smaller steps
-4. **Review Everything**: Always check Claude's output before committing
-5. **Iterate**: If the result isn't perfect, ask Claude to refine it
-6. **Use Git**: Keep track of changes with meaningful commits
-
-## Troubleshooting
-
-**Claude can't find a file**
-- Make sure the file path is correct relative to the project root
-- Check that the file exists
-
-**Code doesn't compile/run**
-- Claude may need more context about dependencies or the project structure
-- Provide error messages so Claude can help debug
-
-**Want to undo Claude's changes**
-- Use `git checkout filename` to revert a file
-- Or use `git reset` for uncommitted changes
-
-## Resources
-
-- [Claude Code Documentation](https://claude.com/claude-code)
-- [VS Code Extension Guide](https://code.visualstudio.com/docs/editor/extension-marketplace)
-- [Git Documentation](https://git-scm.com/doc)
+All methodology content, research design, citations, and analysis decisions are the original work of Timothy D. Spivey.
 
 ---
 
-Happy coding! Use Claude to build amazing things efficiently.
+**Last Updated**: February 2026
+**License**: MIT
+
+For questions about the research design, see [`docs/assignment_2_methods.md`](docs/assignment_2_methods.md).
+For questions about the code structure, see each module's docstrings.
